@@ -18,7 +18,7 @@ stages:
   triggers:
   - type: stage
   jobs:
-  - name: Dev Deploy Stage
+  - name: Deploy Stage
     type: deployer
     target:
       url: ${CF_TARGET_URL}
@@ -39,31 +39,3 @@ stages:
       # Update catalogAPI
       HOST=http://$(cf app $CF_APP_NAME | grep urls: | awk '{print $2}')
       cf uups catalogAPI -p '{"host":"'$HOST'"}'
-- name: Prod Deploy Stage
-  inputs:
-  - type: job
-    stage: Build Stage
-    job: Build
-  jobs:
-  - name: Deploy Stage
-    type: deployer
-    target:
-      url: ${CF_TARGET_URL}
-      organization: ${CF_ORGANIZATION}
-      space: prod
-      application: ${CF_APP}
-    script: |-
-      #!/bin/bash
-      # Publish catalogAPI
-      if ! cf service catalogAPI > /dev/null; then
-        cf cups catalogAPI
-      fi
-
-      # Push app
-      export CF_APP_NAME="$CF_APP"
-      cf push "${CF_APP_NAME}"
-
-      # Update catalogAPI
-      HOST=http://$(cf app $CF_APP_NAME | grep urls: | awk '{print $2}')-prod
-      cf uups catalogAPI -p '{"host":"'$HOST'"}'
-
