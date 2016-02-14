@@ -10,6 +10,14 @@ stages:
   - name: Build
     type: builder
     artifact_dir: ''
+  - name: Test
+    type: tester
+    script: |-
+      #!/bin/bash
+      npm install
+      XUNIT_FILE=tests/TEST-items.xml node_modules/mocha/bin/mocha -R spec-xunit-file tests/server/items.spec.js
+    enable_tests: true
+    test_file_pattern: tests/TEST-*.xml
 - name: Deploy Stage
   inputs:
   - type: job
