@@ -243,4 +243,10 @@
             assert( resMock.send.lastCall.calledWith( { msg: 'Error getting item id: forced error on get' } ), 'Unexpected argument: ' + JSON.stringify(resMock.send.lastCall.args) );
         });
     });
+   
+    describe('superfluous testing', function() {
+    	it('This test looks suspicious', function() {
+    		assert.equal(1, -1);
+    	});
+    });
 }());
