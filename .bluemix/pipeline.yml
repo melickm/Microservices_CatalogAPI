@@ -27,7 +27,10 @@ stages:
       application: ${CF_APP}
     script: |-
       #!/bin/bash
-      # Publish catalogAPI
+      # Create Cloudant service
+      cf create-service cloudantNoSQLDB Shared myMicroservicesCloudant
+
+      # Publish catalogAPI as a service
       if ! cf service catalogAPI > /dev/null; then
         cf cups catalogAPI
       fi
